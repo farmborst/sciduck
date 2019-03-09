@@ -172,7 +172,6 @@ RUN virtualenv --python=python2 --no-site-packages /opt/python/venv_python2.7.13
 ##################################
 ##### Python 3.6.8 Virtualenv ####
 ##################################
-COPY --chown=root:users packages/python/Python-3.6.8.tar.xz /opt/python/
 RUN wget -P /opt/python/ 'https://www.python.org/ftp/python/3.6.8/Python-3.6.8.tar.xz' \
   && tar --no-same-owner --no-same-permissions -xf /opt/python/Python-3.6.8.tar.xz -C /opt/python/ \
   && rm /opt/python/*.tar.xz \
@@ -213,7 +212,6 @@ RUN wget -P /opt/python/ 'https://www.python.org/ftp/python/3.6.8/Python-3.6.8.t
 ##################################
 ##### Python 3.7.2 Virtualenv ####
 ##################################
-COPY --chown=root:users packages/python/Python-3.7.2.tar.xz /opt/python/
 RUN wget -P /opt/python/ 'https://www.python.org/ftp/python/3.7.2/Python-3.7.2.tar.xz' \
   && tar --no-same-owner --no-same-permissions -xf /opt/python/Python-3.7.2.tar.xz -C /opt/python/ \
   && rm /opt/python/*.tar.xz \
