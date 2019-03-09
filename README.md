@@ -34,7 +34,7 @@ Debian based Docker container for Science with JupyterLab
 >> localhost:8888
 ```
 
-## Distribution of the created Docker Image to other machines (skip long build process)
+## Distribution to other machines without build process
 - Save the Docker image existing in your local Docker registry after building it.
 ```
 >> docker save -o sciduck_amd64.tar debian:sciduck
