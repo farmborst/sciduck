@@ -265,9 +265,9 @@ RUN /bin/bash -c "mkdir -p /opt/R/Rpackages/ \
 ##################################################
 COPY --chown=root:users packages/julia_packages.jl /opt/julia/  
 RUN /bin/bash -c " source /opt/python/venv_python3.5.3/bin/activate \
-  && curl 'https://julialang-s3.julialang.org/bin/linux/x64/1.1/julia-1.1.0-linux-x86_64.tar.gz' --output /opt/julia/  \
-  && tar --no-same-owner --no-same-permissions -xf /opt/julia/*tar.gz -C /opt/julia/ \
-  && rm /opt/julia/*.tar.gz \
+  && curl 'https://julialang-s3.julialang.org/bin/linux/x64/1.1/julia-1.1.0-linux-x86_64.tar.gz' --output /opt/julia/julia.tar.gz  \
+  && tar --no-same-owner --no-same-permissions -xf /opt/julia/julia.tar.gz -C /opt/julia/ \
+  && rm /opt/julia/julia.tar.gz \
   && export JULIA_DEPOT_PATH=/opt/julia/julia-1.1.0/local/share/julia:/opt/julia/julia-1.1.0/share/julia \
   && /opt/julia/julia-1.1.0/bin/julia /opt/julia/julia_packages.jl"
 
