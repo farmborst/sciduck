@@ -74,7 +74,6 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
     libffi-dev \
     uuid-dev \
     curl \
-    wget \
   && apt-get install -y -q -t stretch-backports \
     nodejs \
     intel-mkl \
@@ -174,9 +173,9 @@ RUN virtualenv --python=python2 --no-site-packages /opt/python/venv_python2.7.13
 ##################################
 ##### Python 3.6.8 Virtualenv ####
 ##################################
-RUN wget -P /opt/python/ 'https://www.python.org/ftp/python/3.6.8/Python-3.6.8.tar.xz' \
+RUN curl 'https://www.python.org/ftp/python/3.6.8/Python-3.6.8.tar.xz' --output /opt/python/Python-3.6.8.tar.xz \
   && tar --no-same-owner --no-same-permissions -xf /opt/python/Python-3.6.8.tar.xz -C /opt/python/ \
-  && rm /opt/python/*.tar.xz \
+  && rm /opt/python/Python-3.6.8.tar.xz \
   && cd /opt/python/Python-3.6.8/ \
   && ./configure --prefix=/opt/python/ --enable-optimizations \
   && make -j8 \
@@ -214,9 +213,9 @@ RUN wget -P /opt/python/ 'https://www.python.org/ftp/python/3.6.8/Python-3.6.8.t
 ##################################
 ##### Python 3.7.2 Virtualenv ####
 ##################################
-RUN wget -P /opt/python/ 'https://www.python.org/ftp/python/3.7.2/Python-3.7.2.tar.xz' \
+RUN curl 'https://www.python.org/ftp/python/3.7.2/Python-3.7.2.tar.xz' --output /opt/python/Python-3.7.2.tar.xz \
   && tar --no-same-owner --no-same-permissions -xf /opt/python/Python-3.7.2.tar.xz -C /opt/python/ \
-  && rm /opt/python/*.tar.xz \
+  && rm /opt/python/Python-3.7.2.tar.xz \
   && cd /opt/python/Python-3.7.2/ \
   && ./configure --prefix=/opt/python/ --enable-optimizations \
   && make -j8 \
@@ -265,9 +264,9 @@ RUN /bin/bash -c "mkdir -p /opt/R/Rpackages/ \
 ##################################################
 COPY --chown=root:users packages/julia_packages.jl /opt/julia/  
 RUN /bin/bash -c " source /opt/python/venv_python3.5.3/bin/activate \
-  && curl 'https://julialang-s3.julialang.org/bin/linux/x64/1.1/julia-1.1.0-linux-x86_64.tar.gz' --output /opt/julia/julia.tar.gz  \
-  && tar --no-same-owner --no-same-permissions -xf /opt/julia/julia.tar.gz -C /opt/julia/ \
-  && rm /opt/julia/julia.tar.gz \
+  && curl 'https://julialang-s3.julialang.org/bin/linux/x64/1.1/julia-1.1.0-linux-x86_64.tar.gz' --output /opt/julia/julia-1.1.0-linux-x86_64.tar.gz  \
+  && tar --no-same-owner --no-same-permissions -xf /opt/julia/julia-1.1.0-linux-x86_64.tar.gz -C /opt/julia/ \
+  && rm /opt/julia/julia-1.1.0-linux-x86_64.tar.gz \
   && export JULIA_DEPOT_PATH=/opt/julia/julia-1.1.0/local/share/julia:/opt/julia/julia-1.1.0/share/julia \
   && /opt/julia/julia-1.1.0/bin/julia /opt/julia/julia_packages.jl"
 
