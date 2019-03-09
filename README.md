@@ -21,13 +21,10 @@ Debian based Docker container for Science with JupyterLab
 ```
 
 ### Usage
-- make runfile executable
-```
->> chmod +x run 
 ```
 - run the docker image
 ```
->> ./run
+>> docker run -v /:/mnt/dockershare --network host -e HOST_USER_ID=$(id -u) -e HOST_USER_GID=$(id -g) -ti debianstretch:sciduck
 ```
 - start JupyterLab
 
