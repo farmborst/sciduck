@@ -173,7 +173,8 @@ RUN virtualenv --python=python2 --no-site-packages /opt/python/venv_python2.7.13
 ##### Python 3.6.8 Virtualenv ####
 ##################################
 COPY --chown=root:users packages/python/Python-3.6.8.tar.xz /opt/python/
-RUN tar --no-same-owner --no-same-permissions -xf /opt/python/Python-3.6.8.tar.xz -C /opt/python/ \
+RUN wget -P /opt/python/ 'https://www.python.org/ftp/python/3.6.8/Python-3.6.8.tar.xz' \
+  && tar --no-same-owner --no-same-permissions -xf /opt/python/Python-3.6.8.tar.xz -C /opt/python/ \
   && rm /opt/python/*.tar.xz \
   && cd /opt/python/Python-3.6.8/ \
   && ./configure --prefix=/opt/python/ --enable-optimizations \
@@ -206,11 +207,15 @@ RUN tar --no-same-owner --no-same-permissions -xf /opt/python/Python-3.6.8.tar.x
       ipykernel"
 
 
+
+
+
 ##################################
 ##### Python 3.7.2 Virtualenv ####
 ##################################
 COPY --chown=root:users packages/python/Python-3.7.2.tar.xz /opt/python/
-RUN tar --no-same-owner --no-same-permissions -xf /opt/python/Python-3.7.2.tar.xz -C /opt/python/ \
+RUN wget -P /opt/python/ 'https://www.python.org/ftp/python/3.7.2/Python-3.7.2.tar.xz' \
+  && tar --no-same-owner --no-same-permissions -xf /opt/python/Python-3.7.2.tar.xz -C /opt/python/ \
   && rm /opt/python/*.tar.xz \
   && cd /opt/python/Python-3.7.2/ \
   && ./configure --prefix=/opt/python/ --enable-optimizations \
@@ -244,7 +249,7 @@ RUN tar --no-same-owner --no-same-permissions -xf /opt/python/Python-3.7.2.tar.x
 ########################################
 #### R (https://www.r-project.org/) ####
 ########################################
-COPY --chown=root:users packages/R/packages.txt /opt/R/
+COPY --chown=root:users packages/r_packages.r /opt/R/
 RUN /bin/bash -c "mkdir -p /opt/R/Rpackages/ \
   && export GPG_TTY='/dev/tty' \
   && export R_LIBS='/opt/R/Rpackages/' \
@@ -252,19 +257,19 @@ RUN /bin/bash -c "mkdir -p /opt/R/Rpackages/ \
   && apt-key adv --no-tty --keyserver ipv4.pool.sks-keyservers.net --recv-key 'E19F5F87128899B192B1A2C2AD5F960A256A04AF' \
   && apt-get -y -q update \
   && apt-get install -y -q r-base libunwind8-dev \
-  && R -f /opt/R/packages.txt"
+  && R -f /opt/R/r_packages.r"
 
 
 ##################################################
 #### julia (https://julialang.org/downloads/) ####
 ##################################################
-COPY --chown=root:users packages/julia/julia-1.1.0-linux-x86_64.tar.gz /opt/julia/
-COPY --chown=root:users packages/julia/addons.jl /opt/julia
+COPY --chown=root:users packages/julia_packages.jl /opt/julia
 RUN /bin/bash -c " source /opt/python/venv_python3.5.3/bin/activate \
+  && wget -P /opt/julia/ 'https://julialang-s3.julialang.org/bin/linux/x64/1.1/julia-1.1.0-linux-x86_64.tar.gz'
   && tar --no-same-owner --no-same-permissions -xf /opt/julia/*tar.gz -C /opt/julia/ \
   && rm /opt/julia/*.tar.gz \
   && export JULIA_DEPOT_PATH=/opt/julia/julia-1.1.0/local/share/julia:/opt/julia/julia-1.1.0/share/julia \
-  && /opt/julia/julia-1.1.0/bin/julia /opt/julia/addons.jl"
+  && /opt/julia/julia-1.1.0/bin/julia /opt/julia/julia_packages.jl"
 
 
 ###############################################
