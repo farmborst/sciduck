@@ -73,6 +73,7 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
     libsqlite3-dev \
     libffi-dev \
     uuid-dev \
+    curl \
     wget \
   && apt-get install -y -q -t stretch-backports \
     nodejs \
