@@ -28,4 +28,4 @@ sed -i -e "s/^${USER}:\([^:]*\):[0-9]*/${USER}:\1:${USER_GID}/"  /etc/group
 
 chown -R ${USER_ID}:${USER_GID} ${USER_HOME}
 
-exec gosu "${USER}" bash -c "echo -e 'Welcome to SciDuck\n\nFor Standard Setup just run:\njupyter-lab --NotebookApp.token=\"password\" '; source /opt/python/venv_python3.5.3/bin/activate; bash"
+exec gosu "${USER}" bash -c "cat sciduck.txt; echo -e 'Welcome to SciDuck\n\nFor Standard Setup just run:\njupyter-lab --NotebookApp.token=\"password\" '; source /opt/python/venv_python3.5.3/bin/activate; bash"
