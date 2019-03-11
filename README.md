@@ -45,7 +45,7 @@ User id mapping from non-root user inside the docker container to the user-id gi
 ## Distribution to other machines without build process
 - Save the Docker image existing in your local Docker registry after building it.
 ```
->> docker save -o sciduck_amd64.tar debian:sciduck
+>> docker save -o sciduck_amd64.tar debianstretch:sciduck
 ```
 - Copy the created tar file and the runfile to other machine
 - Add the Docker image built to local repository of other machine
