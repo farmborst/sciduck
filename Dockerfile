@@ -74,6 +74,7 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
     libffi-dev \
     uuid-dev \
     curl \
+    ffmpeg \
   && apt-get install -y -q -t stretch-backports \
     nodejs \
     intel-mkl \
@@ -107,8 +108,8 @@ RUN curl -s https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add -
 ##################################
 RUN virtualenv --python=python3 --no-site-packages /opt/python/venv_python3.5.3 \
   && /bin/bash -c "\
-	 source /opt/python/venv_python3.5.3/bin/activate \
-	  && pip install --upgrade \
+   source /opt/python/venv_python3.5.3/bin/activate \
+    && pip install --upgrade \
       pip \
       numpy \
       scipy \
@@ -129,13 +130,14 @@ RUN virtualenv --python=python3 --no-site-packages /opt/python/venv_python3.5.3 
       ipympl \
       pandas_datareader \
       bs4 \
-      numba \
       numexpr \
       octave_kernel \
-	  && pip install --upgrade \
+      llvmlite==0.27.0 \
+    && pip install --upgrade \
+      numba \
       mayavi \
-	  && jupyter labextension install @jupyter-widgets/jupyterlab-manager \
-	  && jupyter labextension install jupyter-matplotlib"
+    && jupyter labextension install @jupyter-widgets/jupyterlab-manager \
+    && jupyter labextension install jupyter-matplotlib"
 
 
 ###################################
@@ -143,31 +145,31 @@ RUN virtualenv --python=python3 --no-site-packages /opt/python/venv_python3.5.3 
 ###################################
 RUN virtualenv --python=python2 --no-site-packages /opt/python/venv_python2.7.13 \
   && /bin/bash -c "\
-	source /opt/python/venv_python2.7.13/bin/activate \
-	&& pip install --upgrade \
-		pip \
-		numpy \
-		scipy \
-		pandas \
-		sympy \
-		h5py \
-		matplotlib \
-		pyfftw \
-		tensorflow \
-		deap \
-		nose \
-		scikit-learn \
-		vtk \
-		pyepics \
-		ipympl \
-		pandas_datareader \
-		bs4 \
-		numba \
-		numexpr \
-	&& pip install --upgrade \
-		mayavi \
-	&& ln -s /usr/lib/python2.7/dist-packages/PyQt5/ /opt/python/venv_python2.7.13/lib/python2.7/site-packages/ \
-	&& ln -s /usr/lib/python2.7/dist-packages/sip.x86_64-linux-gnu.so /opt/python/venv_python2.7.13/lib/python2.7/site-packages/" 
+  source /opt/python/venv_python2.7.13/bin/activate \
+  && pip install --upgrade \
+    pip \
+    numpy \
+    scipy \
+    pandas \
+    sympy \
+    h5py \
+    matplotlib \
+    pyfftw \
+    tensorflow \
+    deap \
+    nose \
+    scikit-learn \
+    vtk \
+    pyepics \
+    ipympl \
+    pandas_datareader \
+    bs4 \
+    numba \
+    numexpr \
+  && pip install --upgrade \
+    mayavi \
+  && ln -s /usr/lib/python2.7/dist-packages/PyQt5/ /opt/python/venv_python2.7.13/lib/python2.7/site-packages/ \
+  && ln -s /usr/lib/python2.7/dist-packages/sip.x86_64-linux-gnu.so /opt/python/venv_python2.7.13/lib/python2.7/site-packages/" 
 
 
 ##################################
@@ -182,8 +184,8 @@ RUN curl 'https://www.python.org/ftp/python/3.6.8/Python-3.6.8.tar.xz' --output 
   && make altinstall \
   && virtualenv --python=/opt/python/bin/python3.6 --no-site-packages /opt/python/venv_python3.6.8 \
   && /bin/bash -c "\
-	 source /opt/python/venv_python3.6.8/bin/activate \
-	  && pip install --upgrade \
+   source /opt/python/venv_python3.6.8/bin/activate \
+    && pip install --upgrade \
       pip \
       numpy \
       scipy \
@@ -222,26 +224,26 @@ RUN curl 'https://www.python.org/ftp/python/3.7.2/Python-3.7.2.tar.xz' --output 
   && make altinstall \
   && virtualenv --python=/opt/python/bin/python3.7 --no-site-packages /opt/python/venv_python3.7.2 \
   && /bin/bash -c "\
-	 source /opt/python/venv_python3.7.2/bin/activate \
-	  && pip install --upgrade \
-		pip \
-		numpy \
-		scipy \
-		pandas \
-		sympy \
-		h5py\
-		matplotlib \
-		pyfftw \
-		deap \
-		nose \
-		scikit-learn \
-		vtk \
-		pyepics \
-		ipympl \
-		pandas_datareader \
-		bs4 \
-		numba \
-		numexpr \
+   source /opt/python/venv_python3.7.2/bin/activate \
+    && pip install --upgrade \
+    pip \
+    numpy \
+    scipy \
+    pandas \
+    sympy \
+    h5py\
+    matplotlib \
+    pyfftw \
+    deap \
+    nose \
+    scikit-learn \
+    vtk \
+    pyepics \
+    ipympl \
+    pandas_datareader \
+    bs4 \
+    numba \
+    numexpr \
    ipykernel"
 
 
