@@ -12,45 +12,45 @@ User id mapping from non-root user inside the docker container to the user-id gi
 
 ## Getting Started
 ### Prerequisites
-- [Install](https://docs.docker.com/install/linux/docker-ce/debian/#uninstall-docker-ce) and [setup](https://docs.docker.com/install/linux/linux-postinstall/) Docker CE
+- [Install](https://docs.docker.com/install/linux/docker-ce/debian/#install-docker-ce) and [setup](https://docs.docker.com/install/linux/linux-postinstall/) Docker CE
 - Install git
 ```
->>  apt-get install git
+apt-get install git
 ```
 
 ### Installation
 - get your local copy of this git repository
 ```
->> git clone https://github.com/farmborst/sciduck.git
+git clone https://github.com/farmborst/sciduck.git
 ```
 - build the docker image
 ```
->> docker build . -t debianstretch:sciduck
+docker build . -t debianstretch:sciduck
 ```
 
 ### Usage
 - run the docker image
 ```
->> docker run -v /:/mnt/dockershare --network host -e HOST_USER_ID=$(id -u) -e HOST_USER_GID=$(id -g) -ti debianstretch:sciduck
+docker run -v /:/mnt/dockershare --network host -e HOST_USER_ID=$(id -u) -e HOST_USER_GID=$(id -g) -ti debianstretch:sciduck
 ```
 - start JupyterLab
 ```
->> jupyter-lab --NotebookApp.token='yourpassword' 
+jupyter-lab --NotebookApp.token='yourpassword' 
 ```
 - access jupyter lab from the webbrowser of your host machine and have fun ...
 ```
->> localhost:8888
+localhost:8888
 ```
 
 ## Distribution to other machines without build process
 - Save the Docker image existing in your local Docker registry after building it.
 ```
->> docker save -o sciduck_amd64.tar debianstretch:sciduck
+docker save -o sciduck_amd64.tar debianstretch:sciduck
 ```
 - Copy the created tar file and the runfile to other machine
 - Add the Docker image built to local repository of other machine
 ```
->> docker load -i sciduck_amd64.tar
+docker load -i sciduck_amd64.tar
 ```
 
 
