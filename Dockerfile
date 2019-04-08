@@ -133,6 +133,8 @@ RUN virtualenv --python=python3 --no-site-packages /opt/python/venv_python3.5.3 
       numexpr \
       octave_kernel \
       llvmlite==0.27.0 \
+      pillow \
+      pymongo \
     && pip install --upgrade \
       numba \
       mayavi \
@@ -166,6 +168,8 @@ RUN virtualenv --python=python2 --no-site-packages /opt/python/venv_python2.7.13
     bs4 \
     numba \
     numexpr \
+    pillow \
+    pymongo \
   && pip install --upgrade \
     mayavi \
   && ln -s /usr/lib/python2.7/dist-packages/PyQt5/ /opt/python/venv_python2.7.13/lib/python2.7/site-packages/ \
@@ -206,10 +210,9 @@ RUN curl 'https://www.python.org/ftp/python/3.6.8/Python-3.6.8.tar.xz' --output 
       bs4 \
       numba \
       numexpr \
+      pillow \
+      pymongo \
       ipykernel"
-
-
-
 
 
 ##################################
@@ -226,25 +229,27 @@ RUN curl 'https://www.python.org/ftp/python/3.7.2/Python-3.7.2.tar.xz' --output 
   && /bin/bash -c "\
    source /opt/python/venv_python3.7.2/bin/activate \
     && pip install --upgrade \
-    pip \
-    numpy \
-    scipy \
-    pandas \
-    sympy \
-    h5py\
-    matplotlib \
-    pyfftw \
-    deap \
-    nose \
-    scikit-learn \
-    vtk \
-    pyepics \
-    ipympl \
-    pandas_datareader \
-    bs4 \
-    numba \
-    numexpr \
-   ipykernel"
+      pip \
+      numpy \
+      scipy \
+      pandas \
+      sympy \
+      h5py\
+      matplotlib \
+      pyfftw \
+      deap \
+      nose \
+      scikit-learn \
+      vtk \
+      pyepics \
+      ipympl \
+      pandas_datareader \
+      bs4 \
+      numba \
+      numexpr \
+      pillow \
+      pymongo \
+      ipykernel"
 
 
 ########################################
@@ -255,7 +260,7 @@ RUN /bin/bash -c "mkdir -p /opt/R/Rpackages/ \
   && export GPG_TTY='/dev/tty' \
   && export R_LIBS='/opt/R/Rpackages/' \
   && echo 'deb https://cloud.r-project.org/bin/linux/debian stretch-cran35/' >> /etc/apt/sources.list.d/cran.list \
-  && apt-key adv --no-tty --keyserver ipv4.pool.sks-keyservers.net --recv-key 'E19F5F87128899B192B1A2C2AD5F960A256A04AF' \
+  && while true; do apt-key adv --no-tty --keyserver ipv4.pool.sks-keyservers.net --recv-key 'E19F5F87128899B192B1A2C2AD5F960A256A04AF' && break || echo 'Trying again...'; done \
   && apt-get -y -q update \
   && apt-get install -y -q r-base libunwind8-dev \
   && R -f /opt/R/r_packages.r"
