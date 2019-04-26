@@ -75,6 +75,9 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
     uuid-dev \
     curl \
     ffmpeg \
+    dvipng \
+    ghostscript \
+    texlive-science \
   && apt-get install -y -q -t stretch-backports \
     nodejs \
     intel-mkl \
