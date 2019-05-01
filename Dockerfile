@@ -78,6 +78,7 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
     dvipng \
     ghostscript \
     texlive-science \
+    texlive-fonts-extra \
   && apt-get install -y -q -t stretch-backports \
     nodejs \
     intel-mkl \
