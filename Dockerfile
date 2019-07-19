@@ -1,5 +1,5 @@
 ####################################
-#### Debian-Stretch Environment ####
+#### Debian Environment ####
 ####################################
 FROM debian:buster
 
@@ -86,6 +86,24 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
     octave \
     nodejs \
     npm \
+    wget \
+    csh \
+    libgsl-dev \
+    gzip \
+    libhdf5-dev \
+    libblas-dev \
+    liblapack-dev \
+    libpng-dev \
+    libxaw7-dev \
+    libmotif-dev \
+    libncurses5-dev \
+    rpm \
+    subversion \
+    tar \
+    tcl-dev \
+    libtiff5-dev \
+    unzip \
+    zlib1g-dev \
   && groupadd --gid "${USER_GID}" "${USER}" && \
     useradd \
     --uid ${USER_ID} \
