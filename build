@@ -1,1 +1,1 @@
-docker build . -t debian10buster:sciduck
+docker build --network=host . -t debian10buster:sciduck
