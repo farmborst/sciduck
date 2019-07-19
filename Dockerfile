@@ -1,7 +1,7 @@
 ####################################
 #### Debian-Stretch Environment ####
 ####################################
-FROM debian:stretch
+FROM debian:buster
 
 # set args for build only
 ARG DEBIAN_FRONTEND=noninteractive
@@ -45,7 +45,7 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
     perl \
     libreadline-dev \
     alien \
-    libgsl2 \
+    libgsl23 \
     libboost-dev \
     libcurl4-openssl-dev \
     libssl-dev \
@@ -57,7 +57,7 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
     libopenblas-dev \
     libatlas3-base \
     libatlas-base-dev \
-    libatlas-dev \
+    libxm4 \
     mpich \
     virtualenv \
     python-dev \
@@ -79,13 +79,13 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
     ghostscript \
     texlive-science \
     texlive-fonts-extra \
-  && apt-get install -y -q -t stretch-backports \
-    nodejs \
     intel-mkl \
     libgl1-mesa-glx \
     libgl1-mesa-dev \
     libglu1-mesa-dev \
     octave \
+    nodejs \
+    npm \
   && groupadd --gid "${USER_GID}" "${USER}" && \
     useradd \
     --uid ${USER_ID} \
@@ -98,21 +98,20 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
   && chgrp -R users /opt/
 
 
-#########################
-##### nodejs and npm ####
-#########################
-COPY dotfiles/nodesource.list /etc/apt/sources.list.d/
-RUN curl -s https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add - \
-  && apt-get update \
-  && apt-get -y -q install nodejs
-
-
 ##################################
-##### Python 3.5.3 Virtualenv ####
+##### Python 3.7.4 Virtualenv ####
 ##################################
-RUN virtualenv --python=python3 --no-site-packages /opt/python/venv_python3.5.3 \
+ARG py3ver="3.7.4"
+RUN mkdir /opt/python && curl "https://www.python.org/ftp/python/${py3ver}/Python-${py3ver}.tar.xz" --output /opt/python/Python-${py3ver}.tar.xz \
+  && tar --no-same-owner --no-same-permissions -xf /opt/python/Python-${py3ver}.tar.xz -C /opt/python/ \
+  && rm /opt/python/Python-${py3ver}.tar.xz \
+  && cd /opt/python/Python-${py3ver}/ \
+  && ./configure --prefix=/opt/python/ --enable-optimizations \
+  && make -j8 \
+  && make altinstall \
+  && virtualenv --python=/opt/python/bin/python3.7 --no-site-packages /opt/python/venv_python${py3ver} \
   && /bin/bash -c "\
-   source /opt/python/venv_python3.5.3/bin/activate \
+   source /opt/python/venv_python${py3ver}/bin/activate \
     && pip install --upgrade \
       pip \
       numpy \
@@ -134,172 +133,108 @@ RUN virtualenv --python=python3 --no-site-packages /opt/python/venv_python3.5.3 
       ipympl \
       pandas_datareader \
       bs4 \
+      numba \
       numexpr \
-      octave_kernel \
-      llvmlite==0.27.0 \
       pillow \
       pymongo \
+      ipykernel \
+      octave_kernel \
+      llvmlite \
+      bokeh \
     && pip install --upgrade \
-      numba \
       mayavi \
     && jupyter labextension install @jupyter-widgets/jupyterlab-manager \
-    && jupyter labextension install jupyter-matplotlib"
+    && jupyter labextension install jupyter-matplotlib \
+    && jupyter labextension install jupyterlab_bokeh"
 
 
-###################################
-##### Python 2.7.13 Virtualenv ####
-###################################
-RUN virtualenv --python=python2 --no-site-packages /opt/python/venv_python2.7.13 \
-  && /bin/bash -c "\
-  source /opt/python/venv_python2.7.13/bin/activate \
-  && pip install --upgrade \
-    pip \
-    numpy \
-    scipy \
-    pandas \
-    sympy \
-    h5py \
-    matplotlib \
-    pyfftw \
-    tensorflow \
-    deap \
-    nose \
-    scikit-learn \
-    vtk \
-    pyepics \
-    ipympl \
-    pandas_datareader \
-    bs4 \
-    numba \
-    numexpr \
-    pillow \
-    pymongo \
-  && pip install --upgrade \
-    mayavi \
-  && ln -s /usr/lib/python2.7/dist-packages/PyQt5/ /opt/python/venv_python2.7.13/lib/python2.7/site-packages/ \
-  && ln -s /usr/lib/python2.7/dist-packages/sip.x86_64-linux-gnu.so /opt/python/venv_python2.7.13/lib/python2.7/site-packages/" 
-
-
-##################################
-##### Python 3.6.8 Virtualenv ####
-##################################
-RUN curl 'https://www.python.org/ftp/python/3.6.8/Python-3.6.8.tar.xz' --output /opt/python/Python-3.6.8.tar.xz \
-  && tar --no-same-owner --no-same-permissions -xf /opt/python/Python-3.6.8.tar.xz -C /opt/python/ \
-  && rm /opt/python/Python-3.6.8.tar.xz \
-  && cd /opt/python/Python-3.6.8/ \
-  && ./configure --prefix=/opt/python/ --enable-optimizations \
-  && make -j8 \
-  && make altinstall \
-  && virtualenv --python=/opt/python/bin/python3.6 --no-site-packages /opt/python/venv_python3.6.8 \
-  && /bin/bash -c "\
-   source /opt/python/venv_python3.6.8/bin/activate \
-    && pip install --upgrade \
-      pip \
-      numpy \
-      scipy \
-      pandas \
-      sympy \
-      h5py\
-      matplotlib \
-      pyfftw \
-      tensorflow \
-      deap \
-      nose \
-      scikit-learn \
-      vtk \
-      pyepics \
-      jupyterthemes \
-      ipympl \
-      pandas_datareader \
-      bs4 \
-      numba \
-      numexpr \
-      pillow \
-      pymongo \
-      ipykernel"
-
-
-##################################
-##### Python 3.7.2 Virtualenv ####
-##################################
-RUN curl 'https://www.python.org/ftp/python/3.7.2/Python-3.7.2.tar.xz' --output /opt/python/Python-3.7.2.tar.xz \
-  && tar --no-same-owner --no-same-permissions -xf /opt/python/Python-3.7.2.tar.xz -C /opt/python/ \
-  && rm /opt/python/Python-3.7.2.tar.xz \
-  && cd /opt/python/Python-3.7.2/ \
-  && ./configure --prefix=/opt/python/ --enable-optimizations \
-  && make -j8 \
-  && make altinstall \
-  && virtualenv --python=/opt/python/bin/python3.7 --no-site-packages /opt/python/venv_python3.7.2 \
-  && /bin/bash -c "\
-   source /opt/python/venv_python3.7.2/bin/activate \
-    && pip install --upgrade \
-      pip \
-      numpy \
-      scipy \
-      pandas \
-      sympy \
-      h5py\
-      matplotlib \
-      pyfftw \
-      deap \
-      nose \
-      scikit-learn \
-      vtk \
-      pyepics \
-      ipympl \
-      pandas_datareader \
-      bs4 \
-      numba \
-      numexpr \
-      pillow \
-      pymongo \
-      ipykernel"
-
-
-########################################
-#### R (https://www.r-project.org/) ####
-########################################
-COPY --chown=root:users packages/r_packages.r /opt/R/
-RUN /bin/bash -c "mkdir -p /opt/R/Rpackages/ \
-  && export GPG_TTY='/dev/tty' \
-  && export R_LIBS='/opt/R/Rpackages/' \
-  && echo 'deb https://cloud.r-project.org/bin/linux/debian stretch-cran35/' >> /etc/apt/sources.list.d/cran.list \
-  && while true; do apt-key adv --no-tty --keyserver ipv4.pool.sks-keyservers.net --recv-key 'E19F5F87128899B192B1A2C2AD5F960A256A04AF' && break || echo 'Trying again...'; done \
-  && apt-get -y -q update \
-  && apt-get install -y -q r-base libunwind8-dev \
-  && R -f /opt/R/r_packages.r"
-
-
-##################################################
-#### julia (https://julialang.org/downloads/) ####
-##################################################
-COPY --chown=root:users packages/julia_packages.jl /opt/julia/  
-RUN /bin/bash -c " source /opt/python/venv_python3.5.3/bin/activate \
-  && curl 'https://julialang-s3.julialang.org/bin/linux/x64/1.1/julia-1.1.0-linux-x86_64.tar.gz' --output /opt/julia/julia-1.1.0-linux-x86_64.tar.gz  \
-  && tar --no-same-owner --no-same-permissions -xf /opt/julia/julia-1.1.0-linux-x86_64.tar.gz -C /opt/julia/ \
-  && rm /opt/julia/julia-1.1.0-linux-x86_64.tar.gz \
-  && export JULIA_DEPOT_PATH=/opt/julia/julia-1.1.0/local/share/julia:/opt/julia/julia-1.1.0/share/julia \
-  && /opt/julia/julia-1.1.0/bin/julia /opt/julia/julia_packages.jl"
-
-
+####################################
+###### Python 2.7.16 Virtualenv ####
+####################################
+#ARG py2ver="2.7.16"
+#RUN curl "https://www.python.org/ftp/python/${py2ver}/Python-${py2ver}.tar.xz" --output /opt/python/Python-${py2ver}.tar.xz \
+#  && tar --no-same-owner --no-same-permissions -xf /opt/python/Python-${py2ver}.tar.xz -C /opt/python/ \
+#  && rm /opt/python/Python-${py2ver}.tar.xz \
+#  && cd /opt/python/Python-${py2ver}/ \
+#  && ./configure --prefix=/opt/python/ --enable-optimizations \
+#  && make -j8 \
+#  && make altinstall \
+#  && virtualenv --python=python2 --no-site-packages /opt/python/venv_python${py2ver} \
+#  && /bin/bash -c "\
+#  source /opt/python/venv_python${py2ver}/bin/activate \
+#  && pip install --upgrade \
+#    pip \
+#    numpy \
+#    scipy \
+#    pandas \
+#    sympy \
+#    h5py \
+#    matplotlib \
+#    pyfftw \
+#    tensorflow \
+#    deap \
+#    nose \
+#    scikit-learn \
+#    vtk \
+#    pyepics \
+#    ipympl \
+#    pandas_datareader \
+#    bs4 \
+#    numba \
+#    numexpr \
+#    pillow \
+#    pymongo \
+#    bokeh \
+#  && pip install --upgrade \
+#    mayavi \
+#  && ln -s /usr/lib/python2.7/dist-packages/PyQt5/ /opt/python/venv_python${py2ver}/lib/python2.7/site-packages/ \
+#  && ln -s /usr/lib/python2.7/dist-packages/sip.x86_64-linux-gnu.so /opt/python/venv_python${py2ver}/lib/python2.7/site-packages/" 
+#
+#
 ###############################################
-### add kernels to virtualenv with jupyter ####
+##### R 3.6.1 (https://www.r-project.org/) ####
 ###############################################
-RUN /bin/bash -c " source /opt/python/venv_python3.5.3/bin/activate \
- && export R_LIBS='/opt/R/Rpackages/'  \
- && export JUPYTER_PATH=/opt/python/venv_python3.5.3/share/jupyter/ \
- && /usr/bin/R --silent -e 'IRkernel::installspec(name = \"ir35\", displayname = \"R 3.5\", prefix=\"/opt/python/venv_python3.5.3/\")' \
- && /opt/python/venv_python2.7.13/bin/python -m ipykernel install --prefix=/opt/python/venv_python3.5.3/ --name python2.7.13 --display-name 'Python 2.7.13' \
- && /opt/python/venv_python3.5.3/bin/python -m ipykernel install --prefix=/opt/python/venv_python3.5.3/ --name python3.5.3 --display-name 'Python 3.5.3' \
- && /opt/python/venv_python3.6.8/bin/python -m ipykernel install --prefix=/opt/python/venv_python3.5.3/ --name python3.6.8 --display-name 'Python 3.6.8' \
- && /opt/python/venv_python3.7.2/bin/python -m ipykernel install --prefix=/opt/python/venv_python3.5.3/ --name python3.7.2 --display-name 'Python 3.7.2' \
- && chmod -R 775 /opt/"
+#ARG rver="3.6.1"
+#COPY --chown=root:users packages/r_packages.r /opt/R/
+#RUN /bin/bash -c "mkdir -p /opt/R/Rpackages/ \
+#  && export GPG_TTY='/dev/tty' \
+#  && export R_LIBS='/opt/R/Rpackages/' \
+#  && echo 'deb https://cloud.r-project.org/bin/linux/debian buster-cran35/' >> /etc/apt/sources.list.d/cran.list \
+#  && while true; do apt-key adv --no-tty --keyserver ipv4.pool.sks-keyservers.net --recv-key 'E19F5F87128899B192B1A2C2AD5F960A256A04AF' && break || echo 'Trying again...'; done \
+#  && apt-get -y -q update \
+#  && apt-get install -y -q r-base libunwind8-dev \
+#  && R -f /opt/R/r_packages.r"
+#
+#
+#########################################################
+##### julia 1.1.1 (https://julialang.org/downloads/) ####
+#########################################################
+#ARG jlver="1.1.1"
+#COPY --chown=root:users packages/julia_packages.jl /opt/julia/  
+#RUN /bin/bash -c " source /opt/python/venv_python${py3ver}/bin/activate \
+#  && curl "https://julialang-s3.julialang.org/bin/linux/x64/1.1/julia-${jlver}-linux-x86_64.tar.gz" --output /opt/julia/julia.tar.gz  \
+#  && tar --no-same-owner --no-same-permissions -xf /opt/julia/julia.tar.gz -C /opt/julia/ \
+#  && rm /opt/julia/julia.tar.gz \
+#  && export JULIA_DEPOT_PATH=/opt/julia/julia-${jlver}/local/share/julia:/opt/julia/julia-${jlver}/share/julia \
+#  && /opt/julia/julia-${jlver}/bin/julia /opt/julia/julia_packages.jl"
+#
+#
+################################################
+#### add kernels to virtualenv with jupyter ####
+################################################
+#RUN /bin/bash -c " source /opt/python/venv_python${py3ver}/bin/activate \
+# && export R_LIBS='/opt/R/Rpackages/'  \
+# && export JUPYTER_PATH=/opt/python/venv_python${py3ver}/share/jupyter/ \
+# && /usr/bin/R --silent -e 'IRkernel::installspec(name = \"r\", displayname = \"R ${rver}\", prefix=\"/opt/python/venv_python${py3ver}/\")' \
+# && /opt/python/venv_python${py2ver}/bin/python -m ipykernel install --prefix=/opt/python/venv_python${py3ver}/ --name python_${py2ver} --display-name 'Python ${py2ver}' \
+# && /opt/python/venv_python${py3ver}/bin/python -m ipykernel install --prefix=/opt/python/venv_python${py3ver}/ --name python_${py3ver} --display-name 'Python ${py3ver}' \
+# && chmod -R 775 /opt/"
 
 
 ##################
 #### dotfiles ####
 ##################
-COPY --chown=root:users dotfiles/jupyter_notebook_config.py /opt/python/venv_python3.5.3/etc/jupyter/
+COPY --chown=root:users dotfiles/jupyter_notebook_config.py /opt/python/venv_python${py3ver}/etc/jupyter/
 COPY dotfiles/sciduck /home/$USER/sciduck
 COPY dotfiles/bashrc /home/$USER/.bashrc 
 COPY dotfiles/vimrc /home/$USER/.vimrc

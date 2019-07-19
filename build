@@ -1,1 +1,1 @@
-docker build . -t debianstretch:sciduck
+docker build . -t debian10buster:sciduck

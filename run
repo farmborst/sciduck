@@ -1,1 +1,1 @@
-docker run -v /:/mnt/dockershare --network host -e HOST_USER_ID=$(id -u) -e HOST_USER_GID=$(id -g) -ti debianstretch:sciduck
+docker run -v /:/mnt/dockershare --network host -e HOST_USER_ID=$(id -u) -e HOST_USER_GID=$(id -g) -ti debian10buster:sciduck

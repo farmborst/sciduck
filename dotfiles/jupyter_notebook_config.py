@@ -8,7 +8,11 @@ c.NotebookApp.open_browser = False
 c.NotebookApp.notebook_dir = '/mnt/dockershare/'
 #c.NotebookApp.certfile = '~/jupytercert.pem'
 #c.NotebookApp.keyfile = '~/jupyterkey.key'
+
+# jupyter available memory (default 1000000)
 c.Spawner.args = ['--NotebookApp.iopub_data_rate_limit=100000000']
+# Allowed kernels (default: all installed)
+c.KernelSpecManager.whitelist = set(["octave", "julia-1.1", "r", "python_2.7.16", "python_3.7.4"])
 
 
 #------------------------------------------------------------------------------
@@ -564,5 +568,3 @@ c.Spawner.args = ['--NotebookApp.iopub_data_rate_limit=100000000']
 
 ## Whitelist of allowed kernel names.
 #  
-#  By default, all installed kernels are allowed.
-c.KernelSpecManager.whitelist = set(["octave", "ir35", "julia-1.1", "python2.7.13", "python3.5.3", "python3.6.8", "python3.7.2"])
