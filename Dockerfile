@@ -104,6 +104,7 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
     libtiff5-dev \
     unzip \
     zlib1g-dev \
+    libbz2-dev \
   && groupadd --gid "${USER_GID}" "${USER}" && \
     useradd \
     --uid ${USER_ID} \
