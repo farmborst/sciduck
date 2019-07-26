@@ -253,7 +253,7 @@ RUN /bin/bash -c " source /opt/python/venv_python${py3ver}/bin/activate \
 ##################
 #### dotfiles ####
 ##################
-COPY --chown=root:users dotfiles/jupyter_notebook_config.py /opt/python/venv_python${py3ver}/etc/jupyter/
+COPY dotfiles/jupyter_notebook_config.py /home/$USER/.jupyter/jupyter_notebook_config.py
 COPY dotfiles/sciduck /home/$USER/sciduck
 COPY dotfiles/bashrc /home/$USER/.bashrc 
 COPY dotfiles/vimrc /home/$USER/.vimrc
