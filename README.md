@@ -3,11 +3,9 @@ Debian based Docker container for Science with JupyterLab.
 User id mapping from non-root user inside the docker container to the user-id given with the docker run command provides easy access to common filesystems and enhanced (not really!) security. Ready to use Kernels (see Dockerfile + packages in git for preinstalled modules):
 - Julia 1.1
 - Octave 4.4.1
-- R 3.5
-- Python 2.7.13
-- Python 3.5.3
-- Python 3.6.8
-- Python 3.7.2
+- R 3.6.1
+- Python 2.7.16
+- Python 3.7.4
 
 
 ## Getting Started
@@ -25,7 +23,7 @@ git clone https://github.com/farmborst/sciduck.git
 ```
 - build the docker image
 ```
-docker build . -t debianstretch:sciduck
+docker build . -t debian:sciduck
 ```
 
 ### Usage
@@ -45,7 +43,7 @@ localhost:8888
 ## Distribution to other machines without build process
 - Save the Docker image existing in your local Docker registry after building it.
 ```
-docker save -o sciduck_amd64.tar debianstretch:sciduck
+docker save -o sciduck_amd64.tar debian:sciduck
 ```
 - Copy the created tar file and the runfile to other machine
 - Add the Docker image built to local repository of other machine
