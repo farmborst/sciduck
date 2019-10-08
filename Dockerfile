@@ -160,6 +160,8 @@ RUN mkdir /opt/python && curl "https://www.python.org/ftp/python/${py3ver}/Pytho
       octave_kernel \
       llvmlite \
       bokeh \
+      imageio \
+      imageio-ffmpeg \
     && pip install --upgrade \
       mayavi \
     && jupyter labextension install @jupyter-widgets/jupyterlab-manager \
@@ -204,6 +206,7 @@ RUN curl "https://www.python.org/ftp/python/${py2ver}/Python-${py2ver}.tar.xz" -
     pillow \
     pymongo \
     bokeh \
+    imageio \
   && pip install --upgrade \
     mayavi \
   && ln -s /usr/lib/python2.7/dist-packages/PyQt5/ /opt/python/venv_python${py2ver}/lib/python2.7/site-packages/ \
