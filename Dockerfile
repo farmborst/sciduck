@@ -242,6 +242,9 @@ RUN /bin/bash -c " source /opt/python/venv_python${py3ver}/bin/activate \
   && tar --no-same-owner --no-same-permissions -xf /opt/julia/julia.tar.gz -C /opt/julia/ \
   && rm /opt/julia/julia.tar.gz \
   && export JULIA_DEPOT_PATH=/opt/julia/julia-${jlver}/local/share/julia:/opt/julia/julia-${jlver}/share/julia \
+  && export PYTHON="/opt/python/venv_python${py3ver}/bin/python"
+  && export JUPYTER="/opt/python/venv_python${py3ver}/bin/jupyter"
+  && export JUPYTER_IPYKERNEL="/opt/python/venv_python${py3ver}/share/jupyter"
   && /opt/julia/julia-${jlver}/bin/julia /opt/julia/julia_packages.jl"
 
 
@@ -252,8 +255,8 @@ RUN /bin/bash -c " source /opt/python/venv_python${py3ver}/bin/activate \
  && export R_LIBS='/opt/R/Rpackages/'  \
  && export JUPYTER_PATH=/opt/python/venv_python${py3ver}/share/jupyter/ \
  && /usr/bin/R --silent -e 'IRkernel::installspec(name = \"r\", displayname = \"R ${rver}\", prefix=\"/opt/python/venv_python${py3ver}/\")' \
- && /opt/python/venv_python${py2ver}/bin/python -m ipykernel install --prefix=/opt/python/venv_python${py3ver}/ --name python_${py2ver} --display-name 'Python ${py2ver}' \
- && /opt/python/venv_python${py3ver}/bin/python -m ipykernel install --prefix=/opt/python/venv_python${py3ver}/ --name python_${py3ver} --display-name 'Python ${py3ver}' \
+ && /opt/python/venv_python${py2ver}/bin/python -m ipykernel install --prefix=/opt/python/venv_python${py3ver}/ --name python2 --display-name 'Python ${py2ver}' \
+ && /opt/python/venv_python${py3ver}/bin/python -m ipykernel install --prefix=/opt/python/venv_python${py3ver}/ --name python3 --display-name 'Python ${py3ver}' \
  && chmod -R 775 /opt/"
 
 

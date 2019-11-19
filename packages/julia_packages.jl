@@ -1,16 +1,14 @@
 using Pkg
 
-ENV["PYTHON"] = "/opt/python/venv_python3.7.4/bin/python"
-ENV["JUPYTER"] = "/opt/python/venv_python3.7.4/bin/jupyter"
-
 Pkg.add("Plots")
 Pkg.add("LaTeXStrings")
 Pkg.add("PyCall")
 Pkg.add("PyPlot")
 Pkg.add("IJulia")
 using IJulia
-IJulia.default_jupyter_data_dir()="/opt/python/venv_python3.7.4/share/jupyter"
-IJulia.installkernel("Julia")
+IJulia.default_jupyter_data_dir()=ENV["JUPYTER_IPYKERNEL"]
+kernelpath = IJulia.installkernel("Julia")
+mv(kernelpath, split(kernelpath, "-")[1])
 Pkg.add("DataFrames")
 Pkg.add("DifferentialEquations")
 Pkg.add("TensorFlow")

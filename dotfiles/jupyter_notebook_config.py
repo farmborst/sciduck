@@ -12,7 +12,7 @@ c.NotebookApp.notebook_dir = '/mnt/dockershare/'
 # jupyter available memory (default 1000000)
 c.Spawner.args = ['--NotebookApp.iopub_data_rate_limit=100000000']
 # Allowed kernels (default: all installed)
-c.KernelSpecManager.whitelist = set(["octave", "julia-1.1", "r", "python_2.7.16", "python_3.7.4"])
+c.KernelSpecManager.whitelist = set(["octave", "julia", "r", "python2", "python3"])
 
 
 #------------------------------------------------------------------------------
