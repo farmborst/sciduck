@@ -118,7 +118,7 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
 
 
 ##################################
-##### Python 3.7.5 Virtualenv ####
+##### Python 3 Virtualenv ####
 ##################################
 ARG py3ver="3.7.5"
 RUN mkdir /opt/python && curl "https://www.python.org/ftp/python/${py3ver}/Python-${py3ver}.tar.xz" --output /opt/python/Python-${py3ver}.tar.xz \
@@ -130,7 +130,8 @@ RUN mkdir /opt/python && curl "https://www.python.org/ftp/python/${py3ver}/Pytho
   && make altinstall \
   && virtualenv --python=/opt/python/bin/python3.7 --no-site-packages /opt/python/venv_python${py3ver} \
   && /bin/bash -c "\
-   source /opt/python/venv_python${py3ver}/bin/activate \
+   ln -s  /opt/python/venv_python${py3ver}/bin/activate /opt/python/activatepy3venv \
+   source /opt/python/activatepy3venv \
     && pip install --upgrade \
       pip \
       numpy \
@@ -172,7 +173,7 @@ RUN mkdir /opt/python && curl "https://www.python.org/ftp/python/${py3ver}/Pytho
 
 
 ###################################
-##### Python 2.7.17 Virtualenv ####
+##### Python 2 Virtualenv ####
 ###################################
 ARG py2ver="2.7.17"
 RUN curl "https://www.python.org/ftp/python/${py2ver}/Python-${py2ver}.tar.xz" --output /opt/python/Python-${py2ver}.tar.xz \
@@ -182,7 +183,7 @@ RUN curl "https://www.python.org/ftp/python/${py2ver}/Python-${py2ver}.tar.xz" -
   && ./configure --prefix=/opt/python/ --enable-optimizations \
   && make -j8 \
   && make altinstall \
-  && virtualenv --python=python2 --no-site-packages /opt/python/venv_python${py2ver} \
+  && virtualenv --python=/opt/python/bin/python2.7 --no-site-packages /opt/python/venv_python${py2ver} \
   && /bin/bash -c "\
   source /opt/python/venv_python${py2ver}/bin/activate \
     && pip install --upgrade \
@@ -217,7 +218,7 @@ RUN curl "https://www.python.org/ftp/python/${py2ver}/Python-${py2ver}.tar.xz" -
 
 
 ##############################################
-#### R 3.6.1 (https://www.r-project.org/) ####
+#### R (https://www.r-project.org/) ####
 ##############################################
 ARG rver="3.6.1"
 COPY --chown=root:users packages/r_packages.r /opt/R/
@@ -232,12 +233,12 @@ RUN /bin/bash -c "mkdir -p /opt/R/Rpackages/ \
 
 
 ########################################################
-#### julia 1.1.1 (https://julialang.org/downloads/) ####
+#### julia (https://julialang.org/downloads/) ####
 ########################################################
-ARG jlver="1.1.1"
+ARG jlver="1.2.0"
 COPY --chown=root:users packages/julia_packages.jl /opt/julia/  
 RUN /bin/bash -c " source /opt/python/venv_python${py3ver}/bin/activate \
-  && curl "https://julialang-s3.julialang.org/bin/linux/x64/1.1/julia-${jlver}-linux-x86_64.tar.gz" --output /opt/julia/julia.tar.gz  \
+  && curl "https://julialang-s3.julialang.org/bin/linux/x64/1.2/julia-${jlver}-linux-x86_64.tar.gz" --output /opt/julia/julia.tar.gz  \
   && tar --no-same-owner --no-same-permissions -xf /opt/julia/julia.tar.gz -C /opt/julia/ \
   && rm /opt/julia/julia.tar.gz \
   && export JULIA_DEPOT_PATH=/opt/julia/julia-${jlver}/local/share/julia:/opt/julia/julia-${jlver}/share/julia \
