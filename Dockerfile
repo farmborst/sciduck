@@ -242,9 +242,9 @@ RUN /bin/bash -c " source /opt/python/venv_python${py3ver}/bin/activate \
   && tar --no-same-owner --no-same-permissions -xf /opt/julia/julia.tar.gz -C /opt/julia/ \
   && rm /opt/julia/julia.tar.gz \
   && export JULIA_DEPOT_PATH=/opt/julia/julia-${jlver}/local/share/julia:/opt/julia/julia-${jlver}/share/julia \
-  && export PYTHON="/opt/python/venv_python${py3ver}/bin/python"
-  && export JUPYTER="/opt/python/venv_python${py3ver}/bin/jupyter"
-  && export JUPYTER_IPYKERNEL="/opt/python/venv_python${py3ver}/share/jupyter"
+  && export PYTHON="/opt/python/venv_python${py3ver}/bin/python" \
+  && export JUPYTER="/opt/python/venv_python${py3ver}/bin/jupyter" \
+  && export JUPYTER_IPYKERNEL="/opt/python/venv_python${py3ver}/share/jupyter" \
   && /opt/julia/julia-${jlver}/bin/julia /opt/julia/julia_packages.jl"
 
 
