@@ -1,1 +1,2 @@
 docker build --network=host . -t debian10buster:sciduck
+# for clean build: --no-cache

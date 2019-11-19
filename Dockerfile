@@ -118,9 +118,9 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
 
 
 ##################################
-##### Python 3.7.4 Virtualenv ####
+##### Python 3.7.5 Virtualenv ####
 ##################################
-ARG py3ver="3.7.4"
+ARG py3ver="3.7.5"
 RUN mkdir /opt/python && curl "https://www.python.org/ftp/python/${py3ver}/Python-${py3ver}.tar.xz" --output /opt/python/Python-${py3ver}.tar.xz \
   && tar --no-same-owner --no-same-permissions -xf /opt/python/Python-${py3ver}.tar.xz -C /opt/python/ \
   && rm /opt/python/Python-${py3ver}.tar.xz \
@@ -162,6 +162,8 @@ RUN mkdir /opt/python && curl "https://www.python.org/ftp/python/${py3ver}/Pytho
       bokeh \
       imageio \
       imageio-ffmpeg \
+      lmfit \
+      pyqt5 \
     && pip install --upgrade \
       mayavi \
     && jupyter labextension install @jupyter-widgets/jupyterlab-manager \
@@ -170,9 +172,9 @@ RUN mkdir /opt/python && curl "https://www.python.org/ftp/python/${py3ver}/Pytho
 
 
 ###################################
-##### Python 2.7.16 Virtualenv ####
+##### Python 2.7.17 Virtualenv ####
 ###################################
-ARG py2ver="2.7.16"
+ARG py2ver="2.7.17"
 RUN curl "https://www.python.org/ftp/python/${py2ver}/Python-${py2ver}.tar.xz" --output /opt/python/Python-${py2ver}.tar.xz \
   && tar --no-same-owner --no-same-permissions -xf /opt/python/Python-${py2ver}.tar.xz -C /opt/python/ \
   && rm /opt/python/Python-${py2ver}.tar.xz \
@@ -183,30 +185,31 @@ RUN curl "https://www.python.org/ftp/python/${py2ver}/Python-${py2ver}.tar.xz" -
   && virtualenv --python=python2 --no-site-packages /opt/python/venv_python${py2ver} \
   && /bin/bash -c "\
   source /opt/python/venv_python${py2ver}/bin/activate \
-  && pip install --upgrade \
-    pip \
-    numpy \
-    scipy \
-    pandas \
-    sympy \
-    h5py \
-    matplotlib \
-    pyfftw \
-    tensorflow \
-    deap \
-    nose \
-    scikit-learn \
-    vtk \
-    pyepics \
-    ipympl \
-    pandas_datareader \
-    bs4 \
-    numba \
-    numexpr \
-    pillow \
-    pymongo \
-    bokeh \
-    imageio \
+    && pip install --upgrade \
+      pip \
+      numpy \
+      scipy \
+      pandas \
+      sympy \
+      h5py \
+      matplotlib \
+      pyfftw \
+      tensorflow \
+      deap \
+      nose \
+      scikit-learn \
+      vtk \
+      pyepics \
+      ipympl \
+      pandas_datareader \
+      bs4 \
+      numba \
+      numexpr \
+      pillow \
+      pymongo \
+      bokeh \
+      imageio \
+      lmfit \
   && pip install --upgrade \
     mayavi \
   && ln -s /usr/lib/python2.7/dist-packages/PyQt5/ /opt/python/venv_python${py2ver}/lib/python2.7/site-packages/ \
