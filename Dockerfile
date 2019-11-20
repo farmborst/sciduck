@@ -1,6 +1,6 @@
-####################################
+############################
 #### Debian Environment ####
-####################################
+############################
 FROM debian:buster
 
 # set args for build only
@@ -117,9 +117,9 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
   && chgrp -R users /opt/
 
 
-##################################
+##############################
 ##### Python 3 Virtualenv ####
-##################################
+##############################
 ARG py3ver="3.7.5"
 RUN mkdir /opt/python && curl "https://www.python.org/ftp/python/${py3ver}/Python-${py3ver}.tar.xz" --output /opt/python/Python-${py3ver}.tar.xz \
   && tar --no-same-owner --no-same-permissions -xf /opt/python/Python-${py3ver}.tar.xz -C /opt/python/ \
@@ -129,11 +129,12 @@ RUN mkdir /opt/python && curl "https://www.python.org/ftp/python/${py3ver}/Pytho
   && make -j8 \
   && make altinstall \
   && virtualenv --python=/opt/python/bin/python3.7 --no-site-packages /opt/python/venv_python${py3ver} \
+  && ln -s /opt/python/venv_python${py3ver}/bin/activate /opt/python/activatepy3venv \
   && /bin/bash -c "\
-   ln -s  /opt/python/venv_python${py3ver}/bin/activate /opt/python/activatepy3venv \
-   source /opt/python/activatepy3venv \
-    && pip install --upgrade \
+   source /opt/python/venv_python${py3ver}/bin/activate \
+    && pip install --no-cache-dir --upgrade \
       pip \
+      cpython \
       numpy \
       scipy \
       pandas \
@@ -145,6 +146,7 @@ RUN mkdir /opt/python && curl "https://www.python.org/ftp/python/${py3ver}/Pytho
       jupyterlab \
       jupyterthemes \
       tensorflow \
+      tensorflow-gpu \
       deap \
       nose \
       scikit-learn \
@@ -169,25 +171,28 @@ RUN mkdir /opt/python && curl "https://www.python.org/ftp/python/${py3ver}/Pytho
       mayavi \
     && jupyter labextension install @jupyter-widgets/jupyterlab-manager \
     && jupyter labextension install jupyter-matplotlib \
-    && jupyter labextension install jupyterlab_bokeh"
+    && jupyter labextension install jupyterlab_bokeh \
+    && deactivate"
 
 
-###################################
+
+##############################
 ##### Python 2 Virtualenv ####
-###################################
+##############################
 ARG py2ver="2.7.17"
 RUN curl "https://www.python.org/ftp/python/${py2ver}/Python-${py2ver}.tar.xz" --output /opt/python/Python-${py2ver}.tar.xz \
   && tar --no-same-owner --no-same-permissions -xf /opt/python/Python-${py2ver}.tar.xz -C /opt/python/ \
   && rm /opt/python/Python-${py2ver}.tar.xz \
   && cd /opt/python/Python-${py2ver}/ \
-  && ./configure --prefix=/opt/python/ --enable-optimizations \
+  && ./configure --prefix=/opt/python/ --enable-optimizations --enable-unicode=ucs4 \
   && make -j8 \
   && make altinstall \
   && virtualenv --python=/opt/python/bin/python2.7 --no-site-packages /opt/python/venv_python${py2ver} \
   && /bin/bash -c "\
   source /opt/python/venv_python${py2ver}/bin/activate \
-    && pip install --upgrade \
+    && pip install --no-cache-dir --upgrade \
       pip \
+      cpython \
       numpy \
       scipy \
       pandas \
@@ -211,15 +216,16 @@ RUN curl "https://www.python.org/ftp/python/${py2ver}/Python-${py2ver}.tar.xz" -
       bokeh \
       imageio \
       lmfit \
-  && pip install --upgrade \
-    mayavi \
+    && pip install --upgrade \
+      mayavi \
+    && deactivate" \
   && ln -s /usr/lib/python2.7/dist-packages/PyQt5/ /opt/python/venv_python${py2ver}/lib/python2.7/site-packages/ \
-  && ln -s /usr/lib/python2.7/dist-packages/sip.x86_64-linux-gnu.so /opt/python/venv_python${py2ver}/lib/python2.7/site-packages/" 
+  && ln -s /usr/lib/python2.7/dist-packages/sip.x86_64-linux-gnu.so /opt/python/venv_python${py2ver}/lib/python2.7/site-packages/
 
 
-##############################################
+########################################
 #### R (https://www.r-project.org/) ####
-##############################################
+########################################
 ARG rver="3.6.1"
 COPY --chown=root:users packages/r_packages.r /opt/R/
 RUN /bin/bash -c "mkdir -p /opt/R/Rpackages/ \
@@ -232,9 +238,10 @@ RUN /bin/bash -c "mkdir -p /opt/R/Rpackages/ \
   && R -f /opt/R/r_packages.r"
 
 
-########################################################
+##################################################
 #### julia (https://julialang.org/downloads/) ####
-########################################################
+# Version must also be updated in bashrc file !!!!
+##################################################
 ARG jlver="1.2.0"
 COPY --chown=root:users packages/julia_packages.jl /opt/julia/  
 RUN /bin/bash -c " source /opt/python/venv_python${py3ver}/bin/activate \

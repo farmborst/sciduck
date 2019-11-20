@@ -45,12 +45,13 @@ fi
 export LIBGL_ALWAYS_SOFTWARE=1
 export XDG_RUNTIME_DIR=/tmp
 
+
 ###############
 #### julia ####
 ###############
-export JULIA_DEPOT_PATH=/home/sciduckusr/.julia/:/opt/julia/julia-1.1.1/local/share/julia:/opt/julia/julia-1.1.1/share/julia
-export JULIA_LOAD_PATH="@:@v#.#:@stdlib:/opt/julia/julia-1.1.1/local/share/julia:/opt/julia/julia-1.1.1/share/julia"
-export JULIA_BINDIR=/opt/julia/julia-1.1.1/bin/
+export JULIA_DEPOT_PATH=/home/sciduckusr/.julia/:/opt/julia/julia-1.2.0/local/share/julia:/opt/julia/julia-1.2.0/share/julia
+export JULIA_LOAD_PATH="@:@v#.#:@stdlib:/opt/julia/julia-1.2.0/local/share/julia:/opt/julia/julia-1.2.0/share/julia"
+export JULIA_BINDIR=/opt/julia/julia-1.2.0/bin/
 export PATH=$PATH:$JULIA_BINDIR
 
 
