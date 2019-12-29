@@ -1,9 +1,9 @@
 # SciDuck
 Debian based Docker container for Science with JupyterLab.
 User id mapping from non-root user inside the docker container to the user-id given with the docker run command provides easy access to common filesystems and enhanced (not really!) security. Ready to use Kernels (see Dockerfile + packages in git for preinstalled modules):
-- Python 3.7.4
-- Python 2.7.16
-- Julia 1.1
+- Python 3.7.5
+- Python 2.7.17
+- Julia 1.2
 - Octave 4.4.1
 - R 3.6.1
 
