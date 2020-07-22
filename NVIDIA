@@ -1,0 +1,21 @@
+# start docker normally without gpus
+./run
+# open started container as root and install THE SAME VERSION nvidia driver as host
+docker ps
+docker exec -it CONTAINER bash
+apt install kmod mesa-utils
+sh /mnt/dockershare/home/NAME/Downloads/NVIDIA-Linux-x86_64-VERSIONNR.run -a -N --ui=none --no-kernel-module
+ldconfig
+chown 1000 /tmp 
+# save changes
+docker commit CONTAINER REPOSITORY:TAG
+
+# start docker with gpu
+xhost +local:root
+docker run --gpus all -v /:/mnt/dockershare -v /tmp/.X11-unix:/tmp/.X11-unix:rw --privileged -e DISPLAY=$DISPLAY --network host -e HOST_USER_ID=$(id -u) -e HOST_USER_GID=$(id -g) -ti debian10buster:accelduck
+
+# test inside docker if gpu working
+glxgears
+
+# back to safety when finished
+xhost -local:root
